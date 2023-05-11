@@ -1,0 +1,90 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+        <ion-title>Settings</ion-title>
+        <ion-progress-bar type="indeterminate" *ngIf="showProgressBar"></ion-progress-bar>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+    <ion-tabs>
+        <ion-router-outlet>
+            <ion-header>
+            </ion-header>
+            <ion-content>
+                <!-- Toggle that enables/disables extra countries -->
+                <ion-item>
+                    <ion-label><b>Enable Extra Countries</b></ion-label>
+                </ion-item>
+                <ion-item>
+                    <ion-toggle labelPlacement="end" [(ngModel)]="extraCountriesEnabled"
+                        (ionChange)="toggleExtraCountries()"></ion-toggle>
+                </ion-item>
+                <!-- Button that displays the list of countries -->
+                <ion-item>
+                    <ion-label><b>Current Country: {{countriesList[currentCountryIndex]}}</b></ion-label>
+                </ion-item>
+                <ion-item>
+                    <ion-button labelPlacement="end"
+                        (click)="btnDisplayCountries()">{{displayCountriesMessage}}</ion-button>
+                </ion-item>
+                <!-- List of the four default countries(au, ie, gb, us) -->
+                <span [hidden]="shortCountryListHidden">
+                    <ion-list *ngFor="let x of shortCountriesList; let indexOfX = index"
+                        [ngClass]="{'selected-item': indexOfX === currentShortCountryListIndex}">
+                        <!-- Item that when clicked will set the selected country as the currentCountry that will be used when requesting the news articles -->
+                        <ion-item (click)="setShortListCountry(indexOfX)">
+                            {{x}}
+                        </ion-item>
+                    </ion-list>
+                </span>
+                <!-- List of all the countries -->
+                <span [hidden]="countryListHidden">
+                    <ion-list *ngFor="let x of countriesList; let indexOfX = index"
+                        [ngClass]="{'selected-item': indexOfX === currentCountryIndex}">
+                        <!-- Item that when clicked will set the selected country as the currentCountry that will be used when requesting the news articles -->
+                        <ion-item (click)="setCountryByCountryIndex(indexOfX)">
+                            {{x}}
+                        </ion-item>
+                    </ion-list>
+                </span>
+                <!-- Toggle that enables/disables offline mode -->
+                <ion-item>
+                    <ion-label><b>Enable Offline Mode</b></ion-label>
+                </ion-item>
+                <ion-item>
+                    <ion-toggle labelPlacement="end" [(ngModel)]="offlineModeEnabled"
+                        (ionChange)="toggleOfflineMode()"></ion-toggle>
+                </ion-item>
+                <!-- Toggle that enables/disables location -->
+                <ion-item>
+                    <ion-label><b>Turn on Location</b></ion-label>
+                </ion-item>
+                <ion-item>
+                    <ion-toggle labelPlacement="end" [(ngModel)]="locationEnabled"
+                        (ionChange)="toggleLocationStatus()"></ion-toggle>
+                    <!-- Button that will find the country you are in and set the country as the currentCountry -->
+                    <ion-button [hidden]="hideCoordinates" (click)="findLocation()" slot="end">Get Country By Current
+                        Location</ion-button>
+                </ion-item>
+            </ion-content>
+        </ion-router-outlet>
+        <!-- Tabs displayed at the bottom of the screen. Clicking on them will bring the user to the corrosponding page -->
+        <ion-tab-bar>
+            <ion-tab-button tab="news" [routerLink]="['/home']">
+                <ion-icon name="newspaper"></ion-icon>
+                <ion-label>News</ion-label>
+            </ion-tab-button>
+
+            <ion-tab-button tab="saved" [routerLink]="['/saved']">
+                <ion-icon name="bookmark"></ion-icon>
+                <ion-label>Saved</ion-label>
+            </ion-tab-button>
+
+            <ion-tab-button tab="settings">
+                <ion-icon name="settings"></ion-icon>
+                <ion-label>Settings</ion-label>
+            </ion-tab-button>
+        </ion-tab-bar>
+    </ion-tabs>
+</ion-content>

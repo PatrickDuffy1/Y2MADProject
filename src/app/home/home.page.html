@@ -1,0 +1,94 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+        <ion-title>News</ion-title>
+        <ion-progress-bar type="indeterminate" *ngIf="showProgressBar"></ion-progress-bar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-tabs>
+    <ion-router-outlet>
+        <ion-content>
+            <ion-content class="ion-padding">
+                <ion-refresher slot="fixed" (ionRefresh)="reloadPageEvent($event)">
+                    <ion-refresher-content></ion-refresher-content>
+                </ion-refresher>
+                <!-- Menu that displays the categories as buttons that the user can select -->
+                <ion-menu contentId="main">
+                    <ion-list style="padding-top: 40px;">
+                        <li *ngFor="let x of categories; let indexOfX = index">
+                            <ion-button color="medium" size="small"
+                                (click)="btnCategoryClicked(indexOfX)">{{x.toUpperCase() }}</ion-button>
+                        </li>
+                    </ion-list>
+                </ion-menu>
+
+                <div id="main">
+                    <ion-header collapse="condense">
+                    </ion-header>
+
+                    <div id="center">
+                        <!-- Message when user is in offline mode -->
+                        <ion-item [hidden]="hideOfflineModeMessage">
+                            <b>Offline Mode</b>
+                        </ion-item>
+                        <!-- Displays name of the selected category (with the first letter capitalised) and the country where the articles are from -->
+                        <ion-item>
+                            <b>Displaying {{categoryName | titlecase}} articles from {{countryName}}</b>
+                        </ion-item>
+                        <!-- Displays the last time this catagory/country combination was updated -->
+                        <ion-item>
+                            <b style="font-size: small;">Last Updated: {{lastTimeUpdated}}</b>
+                        </ion-item>
+                        <!-- Displays message if the user is in offline mode and the catagory/country combination is not stored -->
+                        <ion-item [hidden]="hideNoArticlesMessage">
+                            No Articles to Diplsay
+                        </ion-item>
+                        <!-- Displays the list of articles -->
+                        <ion-list>
+                            <li *ngFor="let x of newsStoriesArray; let indexOfX = index">
+                                <!-- Displays ion card that when clicked will open the article page and show you the selected article -->
+                                <ion-card (click)="goToArticle(indexOfX)">
+                                    <ion-card-header>
+                                        <!-- Displays an image if the article has one, or a default image if it does not -->
+                                        <ion-card-title><img class="image"
+                                                src="{{x.image_url ? x.image_url : 'assets/Images/DefaultImage.png'}}" /></ion-card-title>
+                                        <!-- Displays the title of the article -->
+                                        <ion-card-subtitle>{{x.title}}</ion-card-subtitle>
+                                    </ion-card-header>
+                                    <ion-card-content>
+                                        <!-- Displays the author of the article or displays if it does not have an author -->
+                                        Author: {{x.creator ? x.creator : 'No Author Found'}}
+                                        <!-- Icon that when clicked will display an alert asking users if they wish to add the article to their "Saved Articles" -->
+                                        <ion-icon (click)="presentSaveAlert(indexOfX)" color="medium" name="add-circle"
+                                            size="large"></ion-icon>
+                                    </ion-card-content>
+                                </ion-card>
+                            </li>
+                        </ion-list>
+                    </div>
+                </div>
+            </ion-content>
+        </ion-content>
+    </ion-router-outlet>
+
+    <!-- Tabs displayed at the bottom of the screen. Clicking on them will bring the user to the corrosponding page -->
+    <ion-tab-bar slot="bottom">
+        <ion-tab-button tab="news" (click)="hideMenu()">
+            <ion-icon name="newspaper"></ion-icon>
+            <ion-label>News</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button tab="saved" [routerLink]="['/saved']" (click)="hideMenu()">
+            <ion-icon name="bookmark"></ion-icon>
+            <ion-label>Saved</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button tab="settings" [routerLink]="['/settings']" (click)="hideMenu()">
+            <ion-icon name="settings"></ion-icon>
+            <ion-label>Settings</ion-label>
+        </ion-tab-button>
+    </ion-tab-bar>
+</ion-tabs>

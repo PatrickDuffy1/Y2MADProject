@@ -1,0 +1,50 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+        <ion-back-button slot="start"></ion-back-button>
+        <ion-title>Article</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+    <ion-tabs>
+        <ion-router-outlet>
+            <ion-header>
+            </ion-header>
+            <ion-content>
+                <div id="container" style="text-align: center;">
+                    <!-- Button that brings user to the original article when clicked -->
+                    <ion-button (click)="goToArticle()" color="medium" size="small" expand="block">View original
+                        article</ion-button>
+                    <!-- Displays the title of the article -->
+                    <h2><b>{{currentArticle.title}}</b></h2>
+                    <!-- Displays the publish date of the article -->
+                    <b style="font-size: small;">{{currentArticle.pubDate}}</b><br>
+                    <!-- Displays the author of the article -->
+                    <b style="font-size: small;">{{currentArticle.creator}}</b><br>
+                    <!-- Displays an image if the article has one, or a default image if it does not -->
+                    <img class="image"
+                        src="{{currentArticle.image_url ? currentArticle.image_url : 'assets/Images/DefaultImage.png'}}" /><br>
+                    {{currentArticle.content}}<br>
+                </div>
+            </ion-content>
+        </ion-router-outlet>
+        
+        <!-- Tabs displayed at the bottom of the screen. Clicking on them will bring the user to the corrosponding page -->
+        <ion-tab-bar>
+            <ion-tab-button tab="news" [routerLink]="['/home']">
+                <ion-icon name="newspaper"></ion-icon>
+                <ion-label>News</ion-label>
+            </ion-tab-button>
+
+            <ion-tab-button tab="saved" [routerLink]="['/saved']">
+                <ion-icon name="bookmark"></ion-icon>
+                <ion-label>Saved</ion-label>
+            </ion-tab-button>
+
+            <ion-tab-button tab="settings" [routerLink]="['/settings']">
+                <ion-icon name="settings"></ion-icon>
+                <ion-label>Settings</ion-label>
+            </ion-tab-button>
+        </ion-tab-bar>
+    </ion-tabs>
+</ion-content>

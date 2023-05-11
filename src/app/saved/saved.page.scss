@@ -1,0 +1,14 @@
+ion-content {
+    --padding-top: 80px;
+    --padding-bottom: 75px;
+  }
+
+  ion-card {
+    position: relative;
+  }
+  
+  ion-card-content ion-icon {
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+  }

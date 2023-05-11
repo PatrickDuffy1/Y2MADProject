@@ -1,0 +1,53 @@
+#container {
+  text-align: center;
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#center {
+  text-align: center;
+}
+
+.image {
+    // width: 100%;
+    // height: auto;
+    // max-height: 500px;
+  }
+
+  ion-content {
+    --padding-top: 40px;
+    --padding-bottom: 30px;
+  }
+
+  ion-card {
+    position: relative;
+  }
+  
+  ion-card-content ion-icon {
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+  }
+  
+
+#container strong {
+  font-size: 20px;
+  line-height: 26px;
+}
+
+#container p {
+  font-size: 16px;
+  line-height: 22px;
+
+  color: #8c8c8c;
+
+  margin: 0;
+}
+
+#container a {
+  text-decoration: none;
+}

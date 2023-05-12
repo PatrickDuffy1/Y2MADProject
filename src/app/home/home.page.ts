@@ -44,7 +44,6 @@ export class HomePage
 
     async ionViewWillEnter() 
     {
-        this.showProgressBar = true;
         await this.loadCountryInfoFromStorage();
         await this.newsService.loadSavedApiCallsFromStorage();
         await this.loadOfflineModeStatusFromStorage();
@@ -74,7 +73,6 @@ export class HomePage
 
         this.getNewsArticles();
         this.categoryName = this.newsService.getCategoryByCategoryIndex(this.currentCategoryIndex);
-        this.showProgressBar = false;
     }
 
     async loadCountryInfoFromStorage() 
@@ -96,6 +94,7 @@ export class HomePage
     // Recieves array of articles offlineModeEnabled is false. Displays message if offlineModeEnabled is true. 
     async getNewsArticles() 
     {
+        this.showProgressBar = true;
         this.hideNoArticlesMessage = true;
 
         if (this.offlineModeEnabled == false) 
@@ -115,34 +114,45 @@ export class HomePage
                 let currentTime = new Date();   // Gets the current time.
                 this.savedApiCalls = this.newsService.getSavedApiCalls(); // Gets the most recent version of savedApiCalls from newsService.
 
+                
+                this.lastTimeUpdated = currentTime.toLocaleString();
                 // Pushes the new category/country combination of articles to savedApiCalls.
                 this.savedApiCalls.push({ countryCode: this.countryCode, category: this.currentCategoryIndex, lastUpdated: currentTime.toLocaleString(), articlesArray: this.newsStoriesArray });
                 this.newsService.setSavedApiCalls(this.savedApiCalls);  // // Stores the newly updated savedApiCalls array to storage.
-                //this.lastTimeUpdated = await this.newsService.getLastTimeUpdated(this.countryCode, this.currentCategoryIndex);
             } 
             catch (error) 
             {
                 // If the category/country combination was already stored, get the result 
                 // from savedApiCalls and store the result in newsStoriesArray.
                 this.newsStoriesArray = await this.newsService.getSpecficSavedApiCall(this.countryCode, this.currentCategoryIndex);
+
+                console.log("1. " + this.lastTimeUpdated);
+                // Stores the last time the current category/country combination made an api call (how up to date the displayed articles are).
+                this.lastTimeUpdated = await this.newsService.getLastTimeUpdated(this.countryCode, this.currentCategoryIndex);
+                console.log("2. " + this.lastTimeUpdated);
             }
         }
         else    // If in offline mode
         {
-
             // If the category/country combination was already stored, get the result 
             // from savedApiCalls and store the result in newsStoriesArray.
-            this.newsStoriesArray = await this.newsService.getSpecficSavedApiCall(this.countryCode, this.currentCategoryIndex);
-
-            // If the category/country combination was not in savedApiCalls, display message to user.
             if (this.newsStoriesArray == null) 
             {
+                // If the category/country combination was not in savedApiCalls, display message to user.
                 this.hideNoArticlesMessage = false;
+            }
+            else
+            {
+                this.newsStoriesArray = await this.newsService.getSpecficSavedApiCall(this.countryCode, this.currentCategoryIndex);
+                
+                console.log("3. " + this.lastTimeUpdated);
+                // Stores the last time the current category/country combination made an api call (how up to date the displayed articles are).
+                this.lastTimeUpdated = await this.newsService.getLastTimeUpdated(this.countryCode, this.currentCategoryIndex);
+                console.log("4. " + this.lastTimeUpdated);
             }
         }
 
-        // Stores the last time the current category/country combination made an api call (how up to date the displayed articles are).
-        this.lastTimeUpdated = await this.newsService.getLastTimeUpdated(this.countryCode, this.currentCategoryIndex);
+        this.showProgressBar = false;   
     }
 
     // Sets the current catogory index based on the button clicked and saves it to storage.

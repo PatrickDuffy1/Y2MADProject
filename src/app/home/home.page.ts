@@ -126,30 +126,24 @@ export class HomePage
                 // from savedApiCalls and store the result in newsStoriesArray.
                 this.newsStoriesArray = await this.newsService.getSpecficSavedApiCall(this.countryCode, this.currentCategoryIndex);
 
-                console.log("1. " + this.lastTimeUpdated);
                 // Stores the last time the current category/country combination made an api call (how up to date the displayed articles are).
                 this.lastTimeUpdated = await this.newsService.getLastTimeUpdated(this.countryCode, this.currentCategoryIndex);
-                console.log("2. " + this.lastTimeUpdated);
             }
         }
         else    // If in offline mode
         {
             // If the category/country combination was already stored, get the result 
             // from savedApiCalls and store the result in newsStoriesArray.
+            this.newsStoriesArray = await this.newsService.getSpecficSavedApiCall(this.countryCode, this.currentCategoryIndex);
+
             if (this.newsStoriesArray == null) 
             {
                 // If the category/country combination was not in savedApiCalls, display message to user.
                 this.hideNoArticlesMessage = false;
             }
-            else
-            {
-                this.newsStoriesArray = await this.newsService.getSpecficSavedApiCall(this.countryCode, this.currentCategoryIndex);
                 
-                console.log("3. " + this.lastTimeUpdated);
-                // Stores the last time the current category/country combination made an api call (how up to date the displayed articles are).
-                this.lastTimeUpdated = await this.newsService.getLastTimeUpdated(this.countryCode, this.currentCategoryIndex);
-                console.log("4. " + this.lastTimeUpdated);
-            }
+            // Stores the last time the current category/country combination made an api call (how up to date the displayed articles are).
+            this.lastTimeUpdated = await this.newsService.getLastTimeUpdated(this.countryCode, this.currentCategoryIndex);
         }
 
         this.showProgressBar = false;   
